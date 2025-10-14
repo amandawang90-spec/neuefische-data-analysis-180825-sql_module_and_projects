@@ -95,8 +95,6 @@ FROM airports
 WHERE name LIKE '%Love%';
 
 
-
-
 -- 4: Operator: IN
 /* The IN operator in PostgreSQL is a Boolean operator that checks whether a specified value 
  * exists within a list of values.
@@ -110,9 +108,15 @@ WHERE city IN ('Hamburg', 'Berlin');
 
 -- TRY: select only the rows for these airlines: DL, NK, HA, AS
 
-select faa from airports
-where  faa in ('DL', 'NK', 'HA', 'AS');
+-- select faa from airports
+-- where  faa in ('DL', 'NK', 'HA', 'AS');
 
+SELECT faa
+FROM airports
+WHERE faa LIKE '%DL%'
+   OR faa LIKE '%NK%'
+   OR faa LIKE '%HA%'
+   OR faa LIKE '%AS%';
 
 -- 5: Operator: BETWEEN
 /*  The BETWEEN operator allows you to check if a value falls within a specified interval. 
@@ -171,14 +175,24 @@ ORDER BY alt;
 
 */
 
-SELECT name, 
-       city, 
+-- SELECT name, 
+--        city, 
+--        country, 
+--        lat, 
+--        lon
+-- FROM airports
+-- WHERE lat > 80 OR lon < -60
+--    OR lon > 179 OR lat < -179
+-- ORDER BY lat, lon;
+
+SELECT "name", 
+       "city", 
        country, 
        lat, 
        lon
 FROM airports
-WHERE lat > 80 OR lon < -60
-   OR lon > 179 OR lat < -179
+WHERE (lat < -60 OR lat > 80)
+   OR (lon < -179 OR lon > 179)
 ORDER BY lat, lon;
 
 -- 7: Negation logical operator: NOT
