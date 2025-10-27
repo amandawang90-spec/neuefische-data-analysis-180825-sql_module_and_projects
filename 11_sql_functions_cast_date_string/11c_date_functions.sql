@@ -24,6 +24,8 @@ SELECT CURRENT_TIME AS curr_date_without_time_zone;
  * 		
  * 		Example: Decode flight_date column into day, month and year columns separately for the future analysis. 
  */
+SELECT pg_typeof(flight_date)
+FROM flights
 
 SELECT flight_date, 
 		DATE_PART('day', flight_date) AS flight_day,
@@ -97,6 +99,13 @@ SELECT LEFT(flight_date::VARCHAR, 7) AS yearmonth,
 FROM flights
 GROUP BY yearmonth, origin, dest;
 
+SELECT LEFT(CAST(flights.flight_date AS VARCHAR), 7) AS yearmonth, 
+	   origin, 
+	   dest, 
+	   COUNT(*) AS monthly_count 	
+FROM flights
+GROUP BY yearmonth, origin, dest;
+
 /* 6. TO_TIMESTAMP()
  * 		TO_TIMESTAMP(timestamp, format) -> timestamp
  * 
@@ -121,9 +130,13 @@ FROM monthly_total
  * and using MAKE_DATE() we'll create a DATE from it.
  */
 
-SELECT LEFT(flight_date::VARCHAR, 10) 	
-FROM daily_totals
-GROUP BY yearmonth, origin, dest;
+---WITH monthly_total AS (
+	SELECT MAKE_DATE(flight_date) AS new_date,
+		   origin, 
+		   dest, 
+		   COUNT(*) AS monthly_count 	
+	FROM flights
+    GROUP BY origin, dest
 
 /* 7. MAKE_DATE(year int, month int, day int) -> date: 
  * 		Create date from year, month and day fields

@@ -30,6 +30,7 @@
  * 			- last year of recorded data 
  * 			- for each country
  */
+
 SELECT country,
 	   AVG(life_expectancy) AS avg_life_expectancy,
 	   MIN(year) as first_year,
@@ -48,6 +49,7 @@ ORDER BY country;
  *  
  * 		NOTE: in DBeaver you need to right-click the Schema -> select "Refresh" in order to see the new table
  */
+
 CREATE TABLE countries AS
 SELECT country,
 	   AVG(life_expectancy) AS avg_life_expectancy,
@@ -58,6 +60,7 @@ GROUP BY country
 ORDER BY country;
 
 -- now you can query directly from the aggregated data
+
 SELECT * FROM countries;
 
 /* ### DROP TABLE 
@@ -66,17 +69,20 @@ SELECT * FROM countries;
  *		Careful! There is no "undo" in SQL. If you successfully dropped anything, it is gone.
  *		Make sure you always save the original table creation query. 
  */
+
 DROP TABLE IF EXISTS countries;
 
 /*  	we could also simply write 'DROP TABLE countries', but if there is no table, it will return an error. 
  * 		Try it. Then try the IF EXISTS version again.
  */  
+
 DROP TABLE countries;
 
 /* 		In case we need to recover the table after it was accidentally changed we need to overwrite the existing table. 
  * 		We simply combine both queries. First the query to delete the table and then the query to create it anew. 
  * 		This would be the query to save (e.g. in production documentation).
 */
+
 DROP TABLE IF EXISTS countries;
 CREATE TABLE countries AS
 SELECT country,
@@ -88,6 +94,7 @@ GROUP BY country
 ORDER BY country;
 
 -- check the table
+
 SELECT * FROM countries;
 
 
@@ -100,46 +107,59 @@ SELECT * FROM countries;
  * 		NOTE:The values inside paranthesis have to match the order of the table's columns
  * 		p.s.: We refer to the land of vampires in our example, hence the age and year :)
  */
+
 INSERT INTO countries VALUES ('Transylvania', 200.99999, 1200, 2016);
+SELECT * FROM countries;
 
 /* ### ADDING A COLUMN
  * 		Add a new column named 'period_len' of type numeric to the 'countries' table.
  * 		Note: On creation all values are NULL
  */
+
 ALTER TABLE countries ADD COLUMN period_length numeric;
+SELECT * FROM countries;
 
 /* ### FILLING COLUMN WITH DATA (updating table )
  * 		Update the table 'countries' by setting 'period_len' column as the difference between 'last_year' and 'first_year' columns.
  */
+
 UPDATE countries SET period_length = last_year - first_year;
+SELECT * FROM countries;
 
 /* ### UPDATING A ROW
  * 		Actually, the vampire records start in 1500s. We need to correct our data.
  * 		Update 'first_year' to 1500 and 'total_records' to the difference between 2016 and 1500
  * 		for the row where the country is 'Transylvania'.
  */
+
 UPDATE countries SET first_year = 1500, period_length = last_year - 1500 WHERE country = 'Transylvania';
-	 
+SELECT * FROM countries;
+
 /* ### DELETING ROWS and COLUMS
  * 		We can also delete rows and columns. 
  */
 
 -- Delete the row(s) from the 'countries' table with a condition "country = 'Transylvania'".
+
 DELETE FROM countries WHERE country = 'Transylvania';
+SELECT * FROM countries;
 
 -- Delete the column 'period_length' from the 'countries' table 
+
 ALTER TABLE countries DROP COLUMN period_length;
+SELECT * FROM countries;
 
 -- actually, we need this column later. There is no "undo" in PostgreSQL, but we still have the query and can quickly recreate it.
+
 ALTER TABLE countries ADD COLUMN period_length numeric;
 UPDATE countries SET period_length = last_year - first_year;
-
+SELECT * FROM countries;
 
 /* BONUS 2
  * 
  * ## CREATING EMPTY TABLES AND FILLING THEM WITH DATA
  * 
- * Initially when setting a databas a common way is to create empty tables specifying: 
+ * Initially when setting a database a common way is to create empty tables specifying: 
  * - column names 
  * - data type of each columns
  * - constraints (unique, not null, primary key, references...)
@@ -191,10 +211,27 @@ DROP TABLE IF EXISTS countries_selection;
  *		and paste it here below.
  */
 
+CREATE TABLE countries_selection (
+	   state VARCHAR(255) UNIQUE, -- column accepts only unique values
+	   le_avg NUMERIC NOT NULL, -- the column is not allowing NULL values
+	   record_start INTEGER,
+	   record_end INTEGER,
+	   record_duration INTEGER
+	   );
 
+INSERT INTO countries_selection (state, le_avg, record_start, record_end, record_duration)
+SELECT country, 
+	   ROUND(avg_life_expectancy::NUMERIC, 2), 
+	   first_year, 
+	   last_year, 
+	   period_length
+FROM countries
+WHERE country IN ('Andorra', 'Brazil', 'Germany', 'Nepal', 'Iceland' );
 
+SELECT * FROM countries_selection;
 
 /* Bonus topic: figure out a query to create a table and insert data from a csv file. 
  * Don't take Graphic interface shortcuts, use queries. */ 
+
 
 -- https://www.postgresqltutorial.com/postgresql-tutorial/import-csv-file-into-posgresql-table/

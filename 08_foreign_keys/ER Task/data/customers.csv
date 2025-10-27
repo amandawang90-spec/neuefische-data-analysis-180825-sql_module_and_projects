@@ -1,0 +1,31 @@
+customer_id,name,email,city,signup_date
+1,Customer_1,customer1@example.com,Houston,2023-04-13
+2,Customer_2,customer2@example.com,Seattle,2023-04-03
+3,Customer_3,customer3@example.com,Chicago,2023-01-15
+4,Customer_4,customer4@example.com,San Francisco,2023-04-17
+5,Customer_5,customer5@example.com,Chicago,2023-03-13
+6,Customer_6,customer6@example.com,Dallas,2023-01-21
+7,Customer_7,customer7@example.com,San Francisco,2023-04-13
+8,Customer_8,customer8@example.com,Seattle,2023-05-02
+9,Customer_9,customer9@example.com,Dallas,2023-03-16
+10,Customer_10,customer10@example.com,Los Angeles,2023-03-29
+11,Customer_11,customer11@example.com,Houston,2023-04-27
+12,Customer_12,customer12@example.com,Seattle,2023-04-10
+13,Customer_13,customer13@example.com,Los Angeles,2023-04-14
+14,Customer_14,customer14@example.com,Denver,2023-05-11
+15,Customer_15,customer15@example.com,Seattle,2023-05-30
+16,Customer_16,customer16@example.com,Denver,2023-02-22
+17,Customer_17,customer17@example.com,San Francisco,2023-01-02
+18,Customer_18,customer18@example.com,Los Angeles,2023-03-29
+19,Customer_19,customer19@example.com,Houston,2023-02-07
+20,Customer_20,customer20@example.com,Dallas,2023-05-10
+21,Customer_21,customer21@example.com,Boston,2023-01-21
+22,Customer_22,customer22@example.com,Chicago,2023-02-27
+23,Customer_23,customer23@example.com,New York,2023-01-22
+24,Customer_24,customer24@example.com,Houston,2023-03-30
+25,Customer_25,customer25@example.com,Los Angeles,2023-02-18
+26,Customer_26,customer26@example.com,Boston,2023-02-28
+27,Customer_27,customer27@example.com,Houston,2023-01-15
+28,Customer_28,customer28@example.com,Los Angeles,2023-02-20
+29,Customer_29,customer29@example.com,Miami,2023-04-18
+30,Customer_30,customer30@example.com,Miami,2023-02-24

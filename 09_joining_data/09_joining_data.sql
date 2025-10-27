@@ -6,6 +6,46 @@
  * Best practice is to add "DROP TABLE IF EXISTS <tablename>" clause, in case when we need 
  * to re-run or update our query. Ensuring the previous table will be "over-written".
  */ 
+CREATE TABLE students (
+  student_id SERIAL PRIMARY KEY,
+  student_name VARCHAR(255) NOT NULL,
+  email TEXT UNIQUE
+  );
+
+SELECT * FROM students;
+
+CREATE TABLE enrolments (
+  enrolment_id SERIAL PRIMARY KEY,
+  seminar_name VARCHAR(255),
+  student_id INT
+  );
+
+ALTER TABLE enrolments
+ADD FOREIGN KEY (student_id) REFERENCES students(student_id);
+
+SELECT * FROM enrolments;
+
+INSERT INTO students (student_name, email)
+VALUES 
+('Anna', 'anna@gmail.com')
+,('Joseph', 'joseph@gmail.com')
+,('Scally', 'scally@gmail.com')
+,('Liam', 'liam@gmail.com')
+,('Elif', 'elif@gmail.com');
+
+SELECT * FROM students;
+
+INSERT INTO enrolments (seminar_name, student_id)
+VALUES 
+('science', 2)
+,('history', 1)
+,('ethics', 2)
+,('politics', 1)
+,('art', 5)
+,('engineering', 4);
+
+SELECT * FROM enrolments;
+
 DROP TABLE IF EXISTS exam_grades;
 CREATE TABLE exam_grades (
   seminar_name VARCHAR(255),
@@ -201,7 +241,7 @@ WHERE grade < 2
 -- UNION ALL (retains all rows, including duplicates)
 SELECT * FROM academy_total_mview
 WHERE seminar_name in ('history', 'art')
-UNION
+UNION ALL
 SELECT * FROM academy_total_mview
 WHERE grade < 2
 ;

@@ -10,7 +10,7 @@ So if you have a date data, you're going to be able to use date functions on it,
 which you would not be able to use with just integers or numeric data. 
 
 There are three main categories of data types. We have strings, numeric, Date and time. 
-For each of them there are different data types how you can store datal, the goal of choosing 
+For each of them there are different data types how you can store data, the goal of choosing 
 the right data type is to be as storage efficient as possible. 
 We've summarized the mostly used data types for you in the table below. 
 For a complete picture, please have a look at: https://www.postgresql.org/docs/current/datatype.html
@@ -73,10 +73,12 @@ FROM regions;
 
 /* In the example below we want to extract the year and the month from the flight_date column.
  * For that we need to extract the first 7 characters. The function LEFT() is perfect for this.
- * Hoever, this function only works with character type columns.
+ * However, this function only works with character type columns.
  * flight_date is of type DATE. We can change this by casting the column to type TEXT or VARCHAR.
 */
 
 SELECT LEFT(flight_date::TEXT, 7) AS month_year
 from flights
 
+SELECT LEFT(CAST(flight_date AS VARCHAR), 7) AS month_year
+from flights

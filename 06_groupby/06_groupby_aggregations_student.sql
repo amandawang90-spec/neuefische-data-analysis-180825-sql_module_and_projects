@@ -24,10 +24,11 @@ ORDER BY country;
  * 		The subsequent SELECT statement displays the country name along with the corresponding count of year values in each group.
  * 		Alternitively we could count rows in each group COUNT(*) and call it total_records. 
  */
-SELECT country,
-	   COUNT(year) AS total_years
-FROM life_expectancy
-GROUP BY country
+SELECT country, --3
+	   COUNT(year) AS total_years --3
+FROM life_expectancy --1
+GROUP BY country --2
+ORDER BY country --4
 
 -- What happens if the GROUP BY statement is left out? (Comment it out and check what the error says.)
 
@@ -37,9 +38,10 @@ GROUP BY country
  */
 SELECT country,
 	   COUNT(*) AS total_years,
+	   AVG(life_expectancy) AS avg_life_expectancy
 	   -- enter your code here
 FROM life_expectancy
-GROUP BY country
+GROUP BY country;
 
 
 /* ### 3. Try Out - Average life expectancy per country and ORDER BY the descending average.
@@ -51,9 +53,11 @@ GROUP BY country
  */
 SELECT country,
 	   AVG(life_expectancy) AS avg_life_expectancy, --keep it for the comparison
+	   ROUND(AVG(life_expectancy),2) AS avg_life_expectancy_rounded
 	   -- add your code here
 FROM life_expectancy
 GROUP BY country
+ORDER BY AVG(life_expectancy)
 -- add your code here
 
 
@@ -67,12 +71,12 @@ GROUP BY country
  * 		Here we filter for some countries in a WHERE clause before grouping by them.
  * 
  */
-SELECT country,
+SELECT country,--4
 		ROUND(AVG(life_expectancy)) AS avg_life_expectancy
-FROM life_expectancy
-WHERE country IN('United States','Chile','Italy','Germany','China')
-GROUP BY country
-ORDER BY avg_life_expectancy DESC;
+FROM life_expectancy --1
+WHERE country IN('United States','Chile','Italy','Germany','China') --2
+GROUP BY country --3
+ORDER BY avg_life_expectancy DESC; --5
 
 
 /* ### Try Out - Countries that have an average life expectancy greater than or equal 50
@@ -83,9 +87,9 @@ ORDER BY avg_life_expectancy DESC;
  */
 
 SELECT country,
-		ROUND(AVG(life_expectancy)) AS avg_life_expectancy
+	  ROUND(AVG(life_expectancy)) AS avg_life_expectancy
 FROM life_expectancy
-WHERE -- add code here: filter the average life expectancy >= 50
+WHERE AVG(life_expectancy) >=50  -- add code here: filter the average life expectancy >= 50
 GROUP BY country
 ORDER BY avg_life_expectancy DESC;
 
@@ -99,12 +103,13 @@ ORDER BY avg_life_expectancy DESC;
  * 
  * 		Example (corrrected): Countries that have an average life expectancy greater than or equal 50.
  */
-SELECT country,
+SELECT country,--5
 		ROUND(AVG(life_expectancy)) AS avg_life_expectancy
-FROM life_expectancy
-GROUP BY country
-HAVING AVG(life_expectancy) >= 50
-ORDER BY avg_life_expectancy DESC;
+FROM life_expectancy --1
+WHERE country IN('United States','Chile','Italy','Germany','China') --2
+GROUP BY country  --3
+HAVING AVG(life_expectancy) >= 50 --4
+ORDER BY avg_life_expectancy DESC; --6
 
 /* ### GROUP BY - Handling Multiple Columns 
  * 		To group by multiple columns you simply pass a coma-separated list to the GROUP BY.

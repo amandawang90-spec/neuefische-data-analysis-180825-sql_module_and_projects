@@ -51,7 +51,7 @@ FROM students;
 
 -- UPPER(string) -> text: Convert string to upper case
 SELECT student_name, 
-	   UPPER(student_name) AS name_lower
+	   UPPER(student_name) AS name_upper
 FROM students;
 
  -- INITCAP(string) -> text: Convert the first letter of each word to upper case and the rest to lower case.
@@ -76,6 +76,9 @@ FROM students;
 /* SUBSTRING(string [from int] [for int]) -> text: 
  * Extract substring
  */
+
+SELECT * FROM Students
+
 SELECT SUBSTRING(student_name FROM 3 FOR 2) AS string_substring
 FROM students;
 
@@ -95,13 +98,6 @@ FROM regions;
  */
 SELECT country, region, REPLACE(region,'fri','me') AS region_changed
 FROM regions;
-
-
-
-
-
-
-
 
 /* 
 Teaching Tips:

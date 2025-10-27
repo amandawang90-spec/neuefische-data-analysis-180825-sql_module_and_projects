@@ -2,7 +2,7 @@
  *      Please provide the query below.
  */
 SELECT  * 
-FROM rom flights
+FROM flights
 LIMIT 20;
 
 /* Q2. Select the first 20 rows the 'flights' table with columns that have

@@ -40,9 +40,7 @@ FROM airports;
 
 SELECT COUNT(*)
 FROM airports
-where country='Germany';
-
-
+where country='Germany'
 
 /* 3. COUNT DISTINCT 
  * We've learned how to show only unique values of a column by using DISTINCT
@@ -76,7 +74,6 @@ FROM airports;
 --TRY: What is the average flight time from Boston (BOS) to Honolulu (HNL)
 --	Hint: Use WHERE with two conditions.
 
-
 SELECT
   AVG(actual_elapsed_time) AS average_flight_time_minutes
 FROM flights
@@ -96,9 +93,6 @@ SELECT
 FROM flights
 WHERE
   actual_elapsed_time > 0; -- Avoid division by zero if there are flights with 0 time
-
-
-
 
 
 /* MATHEMATICAL FUNCTIONS and OPERATORS - Essential Tools for Data Manipulation
@@ -126,10 +120,18 @@ WHERE origin = 'BOS' AND dest = 'HNL';
  		a float, for example, to 2 decimals it will cause an error. 
 		FYI, we will cover changing data types (casting) in the later lectures
  */ 		
-SELECT ROUND(3.456457, 2),
-		-- ROUND(3.456457::FLOAT, 2), -- this will cause an error. floats cannot be rounded to a decimal
+SELECT ROUND(3.456457, 2), 
+	   --ROUND(3.456457::FLOAT, 2), -- this will cause an error. floats cannot be rounded to a decimal
 		ROUND(3.456457::NUMERIC, 2)
+		
+SELECT ROUND(3.456457, 2) :
 
+SELECT ROUND(3.456457::FLOAT, 2), -- this will cause an error. floats cannot be rounded to a decimal
+		
+SELECT ROUND(3.456457::NUMERIC, 2)	
+
+SELECT pg_typeof(3.456457) -- check the data type
+		
 /* FLOOR() Function:
 	The FLOOR() function rounds a numeric value down to the nearest integer that is less than or 
 	equal to the input value.
@@ -171,7 +173,7 @@ SELECT flight_date,
 	   origin,
        dest, 
        air_time AS air_time_minutes,
-       air_time / 60 AS air_time_hours 
+       air_time / 60 AS air_time_hours --only result in whole number
 FROM flights;
 
 
@@ -197,7 +199,7 @@ SELECT
 	COUNT(faa) / COUNT(DISTINCT country) AS avg_airports_per_country,
 	COUNT(faa) % COUNT(DISTINCT country) AS remainder_airports, -- the modulo example
 	COUNT(faa)*1.0 / COUNT(DISTINCT country) AS true_ratio_avg_airports_per_country -- *1.0 turns the first value into NUMERIC type
-FROM airports;
+	FROM airports;
 
 /* BONUS - Some practical examples */
 
@@ -219,14 +221,110 @@ WHERE alt >= 12400
  * How long is the total airtime on the 1st of January 2024 in days + hours + minutes?
  */
 
-SELECT SUM(air_time) / 60 / 24 AS days,-- deviding total minutes to whole days
-	   SUM(air_time) / 60 % 24 AS hours, -- shows the remaining hours after deviding to whole days
-	   SUM(air_time) % 60 AS minutes, -- shows the remaining minutes after deviding to total hours,
+SELECT *
+FROM flights
+ORDER BY flight_date;
+
+SELECT 
+    SUM(air_time) / 60 / 24 AS days,       -- dividing total minutes into whole days
+    SUM(air_time) / 60 % 24 AS hours,      -- remaining hours after dividing into days
+    SUM(air_time) % 60 AS minutes          -- remaining minutes after dividing into hours
 FROM flights
 WHERE flight_date = '2024-01-01';
-
 
 /* DOCUMENTATION:
  * Aggregate Functions - https://www.postgresql.org/docs/current/functions-aggregate.html
  * Mathematical Functions and Operators - https://www.postgresql.org/docs/current/functions-math.html
 */
+
+--float/double precision/numeric/decimal differences and relationships
+
+--CREATE TABLE test_float (
+    --f_float FLOAT,
+    --f_double DOUBLE PRECISION
+--);
+
+--INSERT INTO test_float VALUES (0.1234567890123456789, 0.1234567890123456789);
+
+--SELECT f_float, f_double FROM test_float;
+
+--import numpy as np
+
+# 定义一个需要高精度表示的小数
+value = 0.1234567890123456789
+
+# 分别使用单精度 (float32) 和双精度 (float64) 表示
+f32 = np.float32(value)
+f64 = np.float64(value)
+
+print("原始值：       ", value)
+print("单精度 float32:", f32)
+print("双精度 float64:", f64)
+
+# 再看看累积误差：将小数加一百万次
+sum_f32 = np.float32(0.0)
+sum_f64 = np.float64(0.0)
+
+for _ in range(1_000_000):
+    sum_f32 += f32
+    sum_f64 += f64
+
+print("\n累加 1,000,000 次结果：")
+print("单精度 float32:", sum_f32)
+print("双精度 float64:", sum_f64)
+
+原始值：        0.12345678901234568
+单精度 float32: 0.12345679
+双精度 float64: 0.12345678901234568
+
+累加 1,000,000 次结果：
+单精度 float32: 123455.7890625
+双精度 float64: 123456.78901234568
+
+--| 类型             | 精度        | 累加误差           | 说明       |
+--| -------------- | --------- | -------------- | -------- |
+--| `float32`（单精度） | 约 7 位     | 明显误差（少了约 1 单位） | 误差在累积中放大 |
+--| `float64`（双精度） | 约 15–17 位 | 几乎无误差          | 保留更多有效位  |
+
+--float(32) vs float(64):double precision
+--| 类型                 | 存储结果                  | 实际有效数字       | 说明                |
+--| ------------------ | --------------------- | ------------ | ----------------- |
+--| `FLOAT`            | `0.12345679104328156` | ≈7 位有效数字     | 精度丢失，从第 8 位开始误差明显 |
+--| `DOUBLE PRECISION` | `0.12345678901234568` | ≈15–16 位有效数字 | 保留更多有效数字，误差更小     |
+
+
+-- float vs numeric
+--| Value Inserted     | `FLOAT` Stored As     | `NUMERIC(18,6)` Stored As |
+--| ------------------ | --------------------- | ------------------------- |
+--| `0.1 + 0.2`        | `0.30000000000000004` | `0.300000`                |
+--| `123456789.123456` | `123456792.0`         | `123456789.123456`        |
+
+--numeric vs decimal
+--| Feature               | `NUMERIC`             | `DECIMAL`                                        |
+--| --------------------- | --------------------- | ------------------------------------------------ |
+--| Type                  | Exact numeric         | Exact numeric                                    |
+--| Defined precision     | Must be exact         | May be equal or greater (theoretical difference) |
+--| Storage               | Same in most DBs      | Same in most DBs                                 |
+--| Typical use           | Financial, accounting | Financial, accounting                            |
+--| Real-world difference | None                  | None                                             |
+
+
+--float/double precision vs numeric/decimal
+--| Feature     | `FLOAT` / `DOUBLE`       | `NUMERIC` / `DECIMAL`                   |
+--| ----------- | ------------------------ | --------------------------------------- |
+--| Type        | Approximate              | Exact                                   |
+--| Precision   | Limited (~7–17 digits)   | User-defined (up to hundreds of digits) |
+--| Errors      | Rounding errors possible | No rounding error                       |
+--| Performance | Faster                   | Slower                                  |
+--| Typical use | Scientific data          | Money, financial data                   |
+
+DECIMAL AND BINARY:
+HOW TO CHANGE A DECIMAL INTO A BINARY: 0B MEANS BINARY
+WHERE 13 IS DECIMAL AND 1101 IS THE BINARY
+HOW TO CHANGE A BINARY INTO A DECIMAL:
+int('1101', 2)== 13
+WHERE 1101 IS BINARY AND 13 IS THE DECIMAL
+
+bit（比特） 是计算机中最小的数据单位，只能是 0 或 1。
+1 bit → 可以表示 2 个状态：0 或 1
+2 bit → 可以表示 4 个状态：00、01、10、11
