@@ -291,3 +291,30 @@ FROM airports
 WHERE city IS NOT NULL
 GROUP BY city
 ORDER BY total_airports DESC
+
+--Q12: average flights per day
+SELECT flight_date::DATE,
+       COUNT(*) AS total_flights
+FROM merged_flights
+WHERE cancelled = 0  
+GROUP BY flight_date
+
+--Q13: average departure delay per airport
+SELECT *
+FROM merged_flights 
+
+SELECT 
+    faa,
+    ROUND(AVG(dep_delay),2) AS avg_delay
+FROM merged_flights
+WHERE cancelled = 0
+GROUP BY faa
+ORDER BY avg_delay DESC;
+
+--Q14: flights with over 30-minute delays (histogram of delay durations)
+SELECT
+    dep_delay
+FROM
+    flights
+WHERE
+    dep_delay > 30 AND cancelled = 0

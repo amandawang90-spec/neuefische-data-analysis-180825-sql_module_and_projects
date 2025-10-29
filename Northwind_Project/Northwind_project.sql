@@ -753,7 +753,7 @@ SELECT
     ROUND(SUM(nood.unit_price * quantity * (1 - discount))::NUMERIC, 2) AS total_revenue_per_customer
 FROM northwind_orders_order_details AS nood
 GROUP BY nood.customer_id
-LIMIT 5       
+LIMIT 5 
 
 --FOURTH STEP:
 --OPTION 1
