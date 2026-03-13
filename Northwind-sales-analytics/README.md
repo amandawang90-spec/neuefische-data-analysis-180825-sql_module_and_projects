@@ -1,7 +1,5 @@
 # Northwind Sales Analytics — SQL Project
 
-![SQL](https://img.shields.io/badge/SQL-PostgreSQL-blue) ![Status](https://img.shields.io/badge/Status-Completed-green)
-
 ## 📌 Project Overview
 
 This project analyses sales, customer, employee and product performance data for Northwind Traders using SQL and PostgreSQL. The goal is to extract meaningful KPIs, uncover business patterns and deliver data-driven insights to support business decision-making across sales, operations and customer management.
@@ -15,7 +13,7 @@ The analysis progresses from data familiarisation through to complex analytical 
 | Tool | Purpose |
 |---|---|
 | PostgreSQL | Relational database management and querying |
-| AWS RDSCloud-hosted database instance | 
+| AWS RDSCloud-hosted database instance | Cloud-hosted database instance |
 | SQL | Data extraction, transformation and analysis |
 | DBeaver | Database interface for running and managing queries|
 | GitHub | Version control |
