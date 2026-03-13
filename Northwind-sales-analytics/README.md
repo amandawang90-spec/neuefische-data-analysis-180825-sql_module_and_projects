@@ -99,7 +99,6 @@ The database consists of **10 interrelated tables**, with entity relationships d
 - **Employee Performance** — significant variation in revenue generated per employee, with top performers driving a large proportion of total sales
 - **Product Mix** — certain categories consistently outperform others; some categories show low revenue contribution and may warrant review
 - **Discount Effectiveness** — analysis of whether discounts drive higher order values or erode margins
-- **Seasonal Trends** — identified the peak sales month, enabling better inventory and resource planning
 
 > 📝 Detailed findings and query results are available in the project notebooks and business report.
 
